@@ -1,96 +1,89 @@
 import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
-// Css
-import "./cardWeather.css";
-//icon
-import CloudIcon from "@mui/icons-material/Cloud";
 //axios
 import axios from "axios";
-// library moment Time
-import moment from "moment";
 
-import icon from "./img/icon.png";
+// One Card
+import CardWeatherOne from "./CardWeatherOne";
 export default function BasicCard() {
-  const [temp, setTemp] = useState({
-    tempNumber: null,
-    tempMin: null,
-    tempMax: null,
-    description: "",
-  });
-  const [dateToday, setDateToday] = useState(null);
+  // const [temp, setTemp] = useState({
+  //   tempNumber: null,
+  //   tempMin: null,
+  //   tempMax: null,
+  //   description: "",
+  // });
+  const [data, setData] = useState([]);
   useEffect(() => {
-    setDateToday(moment().format("L"));
-    axios
-      .get(
-        "https://api.openweathermap.org/data/2.5/weather?lat=33.5731104&lon=-7.5898434&appid=760a9f4b6086e7b3fc4a29f14b698f88"
-      )
-      .then(function (response) {
+    // setDateToday(moment().format("L"));
+    (async () => {
+      try {
+        const response = await axios.get(
+          "https://api.shecodes.io/weather/v1/forecast?query=Casablanca&key=b03a640e5ef6980o4da35b006t5f2942&units=metric"
+        );
+
         // handle success
-        let tempNumber = Math.round(response.data.main.temp - 273.15);
-        let tempMin = Math.round(response.data.main.temp_min - 273.15);
-        let tempMax = Math.round(response.data.main.temp_max - 273.15);
-        let description = response.data.weather[0].description;
-        let icon = response.data.weather[0].icon;
-        console.log(icon);
-        setTemp({
-          tempNumber: tempNumber,
-          tempMin: tempMin,
-          tempMax: tempMax,
-          description: description,
-          icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
-        });
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
+        // let tempNumber = Math.round(response.data.main.temp - 273.15);
+        // let tempMin = Math.round(response.data.main.temp_min - 273.15);
+        // let tempMax = Math.round(response.data.main.temp_max - 273.15);
+        // let description = response.data.weather[0].description;
+        // let icon = response.data.weather[0].icon;
+        // console.log(icon);
+        // setTemp({
+        //   tempNumber: tempNumber,
+        //   tempMin: tempMin,
+        //   tempMax: tempMax,
+        //   description: description,
+        //   icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
+        // });
+        setData(response.data.daily.splice(0, 4));
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
   }, []);
+
   return (
-    <div className="allCard">
-      <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-          <Typography variant="h5">
-            Weather Casablanca{" "}
-            <span className="dateToDay">
-              <em> {dateToday}</em>
-            </span>
-          </Typography>
-          <hr />
-          <Grid container>
-            <Grid xs={6}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="h3">{temp.tempNumber}</Typography>
-                <img src={temp.icon} alt="" />
-              </div>
-              <span>{temp.description}</span>
-            </Grid>
-            <Grid xs={6} style={{ textAlign: "right" }}>
-              <img
-                src={icon}
-                style={{ width: "130px", height: "130px" }}
-                alt=""
-              />
-            </Grid>
-          </Grid>
-          <div style={{ display: "flex", direction: "left" }}>
-            <Typography variant="body2">Min : {temp.tempMin}</Typography>
-            <Typography style={{ margin: "0px 5px" }} variant="body2">
-              |
-            </Typography>
-            <Typography variant="body2">Max : {temp.tempMax}</Typography>
-          </div>
-        </CardContent>
-      </Card>
+    <div>
+      <div
+        className="allCardWea"
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          background: "rgb(223, 176, 176)",
+        }}
+      >
+        {/* date,tem,minTemp,maxTemp */}
+        {/* <h1>{data.length}</h1> */}
+        {data.map((item, i) => {
+          // const temparture = item.temperature;
+          // const condition = item.condition;
+          const {temperature:temparture,condition} = item;
+          const toDay = new Date();
+          let options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          toDay.setDate(toDay.getDate() + i);
+          return (
+            <CardWeatherOne
+              tem={Math.round(temparture.day)}
+              minTemp={Math.round(temparture.minimum)}
+              maxTemp={Math.round(temparture.maximum)}
+              desc={condition.description}
+              image={condition.icon_url}
+              date={toDay.toLocaleDateString("fr-FR", options)}
+            />
+          );
+        })}
+        {/* <CardWeatherOne date="12/12/12" tem="12" minTemp="11" maxTemp="29" />
+
+        <CardWeatherOne />
+        <CardWeatherOne />
+        <CardWeatherOne /> */}
+      </div>
     </div>
   );
 }
