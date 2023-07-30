@@ -5,6 +5,8 @@ import axios from "axios";
 
 // One Card
 import CardWeatherOne from "./CardWeatherOne";
+//Name City
+import CityName from "./CityName";
 export default function BasicCard() {
   // const [temp, setTemp] = useState({
   //   tempNumber: null,
@@ -45,6 +47,7 @@ export default function BasicCard() {
 
   return (
     <div>
+      <CityName />
       <div
         className="allCardWea"
         style={{
@@ -58,7 +61,7 @@ export default function BasicCard() {
         {data.map((item, i) => {
           // const temparture = item.temperature;
           // const condition = item.condition;
-          const {temperature:temparture,condition} = item;
+          const { temperature: temparture, condition } = item;
           const toDay = new Date();
           let options = {
             weekday: "long",

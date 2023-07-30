@@ -1,20 +1,17 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import icon from "./img/icon.png";
-import CloudIcon from "@mui/icons-material/Cloud";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-// import { useState, useEffect } from "react";
-// library moment Time
-// import moment from "moment";
 
-// Css
-import "./cardWeather.css";
-
-export default function CardWeatherOne({date,tem,minTemp,maxTemp,desc,image}) {
-  // const [dateToday, setDateToday] = useState(null);
-
+export default function CardWeatherOne({
+  date,
+  tem,
+  minTemp,
+  maxTemp,
+  desc,
+  image,
+}) {
   return (
     <div className="allCard">
       <Card sx={{ minWidth: 275, background: "#3949ab", color: "white" }}>
@@ -39,8 +36,7 @@ export default function CardWeatherOne({date,tem,minTemp,maxTemp,desc,image}) {
               <span>{desc}</span>
             </Grid>
             <Grid xs={6} style={{ textAlign: "right" }}>
-                <img src={image} alt="" />
-              
+              <img src={image} alt="" />
             </Grid>
           </Grid>
           <div style={{ display: "flex", direction: "left" }}>
