@@ -1,0 +1,10 @@
+.allCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgb(223, 176, 176);
+}
+.dateToDay{
+    font-size: small;
+}
